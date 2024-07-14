@@ -34,7 +34,9 @@ public class InMemoryItemRepository implements ItemRepository {
     @Override
     public Item getById(long itemId) {
         Item item = items.get(itemId);
-        if (item == null) throw new NotFoundException("Нет item с id = " + itemId);
+        if (item == null) {
+            throw new NotFoundException("Нет item с id = " + itemId);
+        }
         return item;
     }
 

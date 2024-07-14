@@ -71,8 +71,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDto> search(String query) {
         if (query == null || query.isBlank()) {
             return Collections.emptyList();
-        } else {
-            return itemRepository.search(query).stream().map(ItemDtoMapper::toItemDto).collect(Collectors.toList());
         }
+        return itemRepository.search(query).stream().map(ItemDtoMapper::toItemDto).collect(Collectors.toList());
     }
 }
