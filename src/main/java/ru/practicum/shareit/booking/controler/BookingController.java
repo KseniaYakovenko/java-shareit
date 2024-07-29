@@ -10,7 +10,7 @@ import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.IncorrectActionException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.UnAvailableItemException;
+import ru.practicum.shareit.exception.UnavailableItemException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -46,9 +46,6 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
         BookingState state = BookingState.from(stateParam);
-        if (state == null) {
-            throw new IllegalArgumentException("Unknown state: " + stateParam);
-        }
         return bookingService.getBookings(userId, state);
     }
 
@@ -57,9 +54,6 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") long userId,
             @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
         BookingState state = BookingState.from(stateParam);
-        if (state == null) {
-            throw new IllegalArgumentException("Unknown state: " + stateParam);
-        }
         return bookingService.getBookingsForOwner(userId, state);
     }
 
@@ -77,7 +71,7 @@ public class BookingController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleException(final UnAvailableItemException e) {
+    public ErrorResponse handleException(final UnavailableItemException e) {
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);

@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking;
 
+import java.util.Arrays;
+
 public enum BookingStatus {
     WAITING,
     APPROVED,
@@ -7,11 +9,8 @@ public enum BookingStatus {
     CANCELED;
 
     public static BookingStatus from(String status) {
-        for (BookingStatus value : BookingStatus.values()) {
-            if (value.name().equals(status)) {
-                return value;
-            }
-        }
-        return null;
+        return Arrays.stream(BookingStatus.values())
+                .filter(value -> value.name().equals(status)).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + status));
     }
 }

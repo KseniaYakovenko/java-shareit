@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class CommentRequestDto {
     @NotBlank
-    String text;
+    private String text;
 }

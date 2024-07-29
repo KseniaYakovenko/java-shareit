@@ -19,7 +19,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.dto.BookingDtoMapper.toBookingDto;
@@ -44,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
         return toItemDto(itemRepository.save(item));
     }
 
+    @Transactional
     @Override
     public ItemDto update(ItemDto itemDto, long userId) {
 
@@ -71,6 +71,7 @@ public class ItemServiceImpl implements ItemService {
         return toItemDto(itemRepository.save(item));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public ItemInfoDto getById(long itemId, long userId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
@@ -82,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
                 .filter(booking -> !booking.getStatus().equals(BookingStatus.REJECTED.name()))
                 .collect(Collectors.toList());
         if (item.getOwner().getId().equals(userId)) {
-            getBooking(bookings, itemInfoDto);
+            setLastNextBooking(bookings, itemInfoDto);
         }
         List<Comment> comments = commentRepository.findAllByItemId(itemId);
         List<CommentDto> commentDtoList = comments.stream().map(CommentDtoMapper::toCommentDto).toList();
@@ -90,22 +91,19 @@ public class ItemServiceImpl implements ItemService {
         return itemInfoDto;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<ItemInfoDto> getUserItems(long userId) {
         List<ItemInfoDto> itemInfoDtos = itemRepository.findByOwnerId(userId).stream().map(ItemDtoMapper::toItemInfoDto).toList();
         List<Long> itemIds = itemInfoDtos.stream().map(ItemInfoDto::getId).toList();
         List<Booking> bookings = bookingRepository.findAllByItemIds(itemIds);
         itemInfoDtos.forEach(
-                getItemInfoDtoConsumer(bookings)
+                item -> setLastNextBooking(bookings, item)
         );
         return itemInfoDtos.stream().sorted(Comparator.comparing(ItemInfoDto::getId)).collect(Collectors.toList());
     }
 
-    private static Consumer<ItemInfoDto> getItemInfoDtoConsumer(List<Booking> bookings) {
-        return item -> getBooking(bookings, item);
-    }
-
-    private static void getBooking(List<Booking> bookings, ItemInfoDto item) {
+    private static void setLastNextBooking(List<Booking> bookings, ItemInfoDto item) {
         List<Booking> bks = bookings.stream().filter(b ->
                 Objects.equals(b.getItem().getId(), item.getId())).toList();
         bks.stream().filter(b -> b.getStart().isBefore(LocalDateTime.now()))

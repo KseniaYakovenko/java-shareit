@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class BookingRequestDto {
-    Long itemId;
+    private Long itemId;
     @FutureOrPresent
-    LocalDateTime start;
+    private LocalDateTime start;
     @Future
-    LocalDateTime end;
-    Long bookerId;
+    private LocalDateTime end;
+    private Long bookerId;
 }

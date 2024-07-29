@@ -12,7 +12,7 @@ import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.IncorrectActionException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.exception.UnAvailableItemException;
+import ru.practicum.shareit.exception.UnavailableItemException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -39,6 +39,7 @@ public class BookingServiceImpl implements BookingService {
         return filteredByState(state, bookingDtos).stream().sorted(Comparator.comparing(BookingDto::getStart).reversed()).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<BookingDto> getBookingsForOwner(long ownerId, BookingState state) {
         List<BookingDto> bookingDtos = bookingRepository.findByOwnerId(ownerId).stream().map(
@@ -86,7 +87,7 @@ public class BookingServiceImpl implements BookingService {
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new NotFoundException("Нет item с id = " + itemId));
         if (!item.getAvailable()) {
-            throw new UnAvailableItemException("item с id = " + itemId + " недоступен для бронирования");
+            throw new UnavailableItemException("item с id = " + itemId + " недоступен для бронирования");
         }
         if (item.getOwner().getId() == userId) {
             throw new NotFoundException("item с id = " + itemId + " недоступен для бронирования владельцем");
@@ -102,22 +103,16 @@ public class BookingServiceImpl implements BookingService {
         if (booking == null) {
             throw new NotFoundException("no booking");
         }
-
         if (booking.getStatus().equals(BookingStatus.APPROVED.name())) {
             throw new IncorrectActionException("Status already set");
         }
-        BookingStatus status;
-
-        if (approved) {
-            status = BookingStatus.APPROVED;
-        } else {
-            status = BookingStatus.REJECTED;
-        }
+        BookingStatus status = approved ? BookingStatus.APPROVED : BookingStatus.REJECTED;
         booking.setStatus(status.name());
         bookingRepository.save(booking);
         return toBookingDto(booking);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public BookingDto getBookingByIdAndUserId(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findByIdAndUserId(bookingId, userId);
