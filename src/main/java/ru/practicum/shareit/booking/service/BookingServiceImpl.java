@@ -101,7 +101,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto update(Long bookingId, boolean approved, long userId) {
         Booking booking = bookingRepository.findByOwnerIdAndBookingId(userId, bookingId);
         if (booking == null) {
-            throw new NotFoundException("no booking");
+            throw new IllegalArgumentException("no booking");
         }
         if (booking.getStatus().equals(BookingStatus.APPROVED.name())) {
             throw new IncorrectActionException("Status already set");
