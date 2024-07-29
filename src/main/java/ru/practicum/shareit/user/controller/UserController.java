@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.exception.EmailExistException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validator.Marker;
@@ -66,12 +65,6 @@ public class UserController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleException(final NotFoundException e) {
-        return getErrorResponse(e, log);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleException(final EmailExistException e) {
         return getErrorResponse(e, log);
     }
 }

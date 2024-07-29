@@ -10,7 +10,7 @@ import ru.practicum.shareit.validator.Marker;
 @Data
 public class ItemDto {
     Long id;
-    @Pattern(regexp = "\\S+", groups = Marker.OnCreate.class)
+    @Pattern(regexp = "\\W+", groups = Marker.OnCreate.class)
     String name;
     @NotNull(groups = Marker.OnCreate.class)
     String description;
