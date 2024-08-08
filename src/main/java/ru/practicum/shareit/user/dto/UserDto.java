@@ -9,9 +9,9 @@ import ru.practicum.shareit.validator.Marker;
 @Data
 @AllArgsConstructor
 public class UserDto {
-    Long id;
-    String name;
+    private Long id;
+    private String name;
     @NotNull(groups = Marker.OnCreate.class)
     @Email(groups = {Marker.OnUpdate.class, Marker.OnCreate.class})
-    String email;
+    private String email;
 }

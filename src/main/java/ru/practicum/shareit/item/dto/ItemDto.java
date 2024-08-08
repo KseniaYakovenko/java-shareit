@@ -9,12 +9,12 @@ import ru.practicum.shareit.validator.Marker;
 @AllArgsConstructor
 @Data
 public class ItemDto {
-    Long id;
+    private Long id;
     @Pattern(regexp = "\\S+", groups = Marker.OnCreate.class)
-    String name;
+    private String name;
     @NotNull(groups = Marker.OnCreate.class)
-    String description;
+    private String description;
     @NotNull(groups = Marker.OnCreate.class)
-    Boolean available;
-    Long requestId;
+    private Boolean available;
+    private Long requestId;
 }

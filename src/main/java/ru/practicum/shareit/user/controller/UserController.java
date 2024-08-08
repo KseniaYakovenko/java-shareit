@@ -2,11 +2,11 @@ package ru.practicum.shareit.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.exception.EmailExistException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.service.UserService;
 import ru.practicum.shareit.validator.Marker;
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public UserDto createUser(
             @RequestBody @Validated(Marker.OnCreate.class) UserDto userDto) {
         log.info("Create user: {} - Started", userDto);
@@ -69,9 +69,9 @@ public class UserController {
         return getErrorResponse(e, log);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(DataAccessException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleException(final EmailExistException e) {
+    public ErrorResponse handleException(final Exception e) {
         return getErrorResponse(e, log);
     }
 }
