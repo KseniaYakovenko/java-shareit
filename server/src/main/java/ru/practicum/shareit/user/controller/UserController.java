@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.ErrorResponse;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.service.UserService;
@@ -13,7 +14,7 @@ import ru.practicum.shareit.validator.Marker;
 
 import java.util.List;
 
-import static ru.practicum.shareit.user.controller.ErrorResponse.getErrorResponse;
+import static ru.practicum.shareit.ErrorResponse.getErrorResponse;
 
 @Slf4j
 @RequiredArgsConstructor

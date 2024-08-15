@@ -6,6 +6,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.ErrorResponse;
 import ru.practicum.shareit.exception.IncorrectActionException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
@@ -18,7 +19,7 @@ import ru.practicum.shareit.validator.Marker;
 
 import java.util.List;
 
-import static ru.practicum.shareit.item.controller.ErrorResponse.getErrorResponse;
+import static ru.practicum.shareit.ErrorResponse.getErrorResponse;
 
 
 @Slf4j

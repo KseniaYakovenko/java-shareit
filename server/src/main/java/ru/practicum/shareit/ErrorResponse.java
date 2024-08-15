@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.controller;
+package ru.practicum.shareit;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +10,7 @@ import java.io.StringWriter;
 
 @Data
 public class ErrorResponse {
+
     @JsonProperty("error")
     private String message;
     @JsonIgnore
@@ -19,7 +20,7 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    static ErrorResponse getErrorResponse(Exception e, Logger log) {
+    public static ErrorResponse getErrorResponse(Exception e, Logger log) {
         log.info("Error", e);
         ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
         StringWriter sw = new StringWriter();

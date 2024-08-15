@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.ErrorResponse;
 import ru.practicum.shareit.exception.IncorrectActionException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.request.dto.RequestDto;
@@ -13,7 +14,8 @@ import ru.practicum.shareit.request.service.RequestService;
 
 import java.util.Collection;
 
-import static ru.practicum.shareit.request.controller.ErrorResponse.getErrorResponse;
+import static ru.practicum.shareit.ErrorResponse.getErrorResponse;
+
 
 @Slf4j
 @RequiredArgsConstructor
