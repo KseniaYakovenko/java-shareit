@@ -11,39 +11,41 @@ import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.IncorrectActionException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UnavailableItemException;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+
+import static ru.practicum.shareit.utils.Constants.USER_ID_HEADER;
 
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 public class BookingController {
+
     private final BookingService bookingService;
 
     @PostMapping
     public BookingDto create(@RequestBody BookingRequestDto bookingRequestDto,
-                             @RequestHeader("X-Sharer-User-Id") long userId) {
+                             @RequestHeader(USER_ID_HEADER) long userId) {
 
         return bookingService.create(bookingRequestDto, userId);
     }
 
     @PatchMapping("/{bookingId}")
     public BookingDto approved(@PathVariable Long bookingId, @RequestParam boolean approved,
-                               @RequestHeader("X-Sharer-User-Id") long userId) {
+                               @RequestHeader(USER_ID_HEADER) long userId) {
         return bookingService.update(bookingId, approved, userId);
     }
 
     @GetMapping("/{bookingId}")
     public BookingDto getBooking(@PathVariable Long bookingId,
-                                 @RequestHeader("X-Sharer-User-Id") long userId) {
+                                 @RequestHeader(USER_ID_HEADER) long userId) {
         return bookingService.getBookingByIdAndUserId(bookingId, userId);
     }
 
     @GetMapping
     public List<BookingDto> getBookings(
-            @RequestHeader("X-Sharer-User-Id") long userId,
+            @RequestHeader(USER_ID_HEADER) long userId,
             @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
         BookingState state = BookingState.from(stateParam);
         return bookingService.getBookings(userId, state);
@@ -51,7 +53,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     public List<BookingDto> getBookingsForOwner(
-            @RequestHeader("X-Sharer-User-Id") long userId,
+            @RequestHeader(USER_ID_HEADER) long userId,
             @RequestParam(name = "state", defaultValue = "ALL") String stateParam) {
         BookingState state = BookingState.from(stateParam);
         return bookingService.getBookingsForOwner(userId, state);

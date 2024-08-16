@@ -5,7 +5,7 @@ import ru.practicum.shareit.request.model.Request;
 import java.util.Collections;
 
 public class RequestDtoMapper {
-    public RequestDtoMapper() {
+    private RequestDtoMapper() {
     }
 
     public static RequestInfoDto toRequestInfoDto(Request request) {

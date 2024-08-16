@@ -20,6 +20,7 @@ import ru.practicum.shareit.validator.Marker;
 import java.util.List;
 
 import static ru.practicum.shareit.ErrorResponse.getErrorResponse;
+import static ru.practicum.shareit.utils.Constants.USER_ID_HEADER;
 
 
 @Slf4j
@@ -33,14 +34,14 @@ public class ItemController {
 
     @PostMapping
     public ItemDto create(@RequestBody @Validated(Marker.OnCreate.class) ItemDto itemDto,
-                          @RequestHeader("X-Sharer-User-Id") long userId) {
+                          @RequestHeader(USER_ID_HEADER) long userId) {
         return itemService.create(itemDto, userId);
     }
 
     @PatchMapping("/{itemId}")
     public ItemDto update(@PathVariable long itemId,
                           @RequestBody ItemDto itemDto,
-                          @RequestHeader("X-Sharer-User-Id") long userId) {
+                          @RequestHeader(USER_ID_HEADER) long userId) {
 
         itemDto.setId(itemId);
         return itemService.update(itemDto, userId);
@@ -48,12 +49,12 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemInfoDto getById(@PathVariable long itemId,
-                               @RequestHeader("X-Sharer-User-Id") long userId) {
+                               @RequestHeader(USER_ID_HEADER) long userId) {
         return itemService.getById(itemId, userId);
     }
 
     @GetMapping
-    public List<ItemInfoDto> getAllUserItems(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public List<ItemInfoDto> getAllUserItems(@RequestHeader(USER_ID_HEADER) long userId) {
         return itemService.getUserItems(userId);
     }
 
@@ -65,7 +66,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@PathVariable long itemId,
                                     @RequestBody CommentRequestDto commentRequestDto,
-                                    @RequestHeader("X-Sharer-User-Id") long userId) {
+                                    @RequestHeader(USER_ID_HEADER) long userId) {
         return itemService.createComment(commentRequestDto, itemId, userId);
     }
 

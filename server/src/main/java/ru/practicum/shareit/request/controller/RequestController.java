@@ -15,6 +15,7 @@ import ru.practicum.shareit.request.service.RequestService;
 import java.util.Collection;
 
 import static ru.practicum.shareit.ErrorResponse.getErrorResponse;
+import static ru.practicum.shareit.utils.Constants.USER_ID_HEADER;
 
 
 @Slf4j
@@ -27,23 +28,23 @@ public class RequestController {
 
     @PostMapping
     public RequestInfoDto create(@RequestBody @Validated RequestDto requestDto,
-                                     @RequestHeader("X-Sharer-User-Id") long userId) {
+                                     @RequestHeader(USER_ID_HEADER) long userId) {
         return requestService.create(requestDto, userId);
     }
 
     @GetMapping("/{requestId}")
     public RequestInfoDto getById(@PathVariable long requestId,
-                               @RequestHeader("X-Sharer-User-Id") long userId) {
+                               @RequestHeader(USER_ID_HEADER) long userId) {
         return requestService.getByRequestId(requestId, userId);
     }
 
     @GetMapping
-    public Collection<RequestInfoDto> getAllByUser(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public Collection<RequestInfoDto> getAllByUser(@RequestHeader(USER_ID_HEADER) long userId) {
         return requestService.findAllRequestsByUserId(userId);
     }
 
     @GetMapping("/all")
-    public Collection<RequestInfoDto> getAll(@RequestHeader("X-Sharer-User-Id") long userId) {
+    public Collection<RequestInfoDto> getAll(@RequestHeader(USER_ID_HEADER) long userId) {
         return requestService.findAll();
     }
 
